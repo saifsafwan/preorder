@@ -25,9 +25,6 @@
         <!-- Text -->
         <div class="flex-1">
             <h2 class="text-xl font-semibold text-gray-700 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
                 Pulut Kuning + Rendang Daging
             </h2>
             <!-- Combined Available and Ordered Pax -->
@@ -42,7 +39,7 @@
             <p id="remaining-pax" class="text-sm text-gray-600 mt-2 hidden"></p>
             <!-- Status -->
             <p id="status" class="mt-3">
-                <span id="fire-icon" class="text-red-500 text-xl hidden">🔥</span>
+                <span id="fire-icon" class="text-red-500 text-xl hidden">🔥HOT🔥</span>
                 <span id="new-label" class="text-green-500 font-bold animate-bounce-custom">NEW</span>
             </p>
         </div>
@@ -248,7 +245,7 @@
                 headers: { "Content-Type": "application/json" }
             });
 
-            const result = await response.json();
+            //const result = await response.json();
 
             // Send data to WhatsApp
             const whatsappMessage = `New Pre-order!\n\nName: ${orderDetails.name}\nPhone: ${orderDetails.phone}\nPax: ${orderDetails.pax}\nTotal Price: RM${orderDetails.totalPrice}\nDelivery: ${orderDetails.delivery}`;
