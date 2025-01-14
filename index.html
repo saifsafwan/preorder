@@ -255,12 +255,8 @@
             const whatsappUrl = `https://wa.me/60189744569?text=${encodeURIComponent(whatsappMessage)}`; // Replace with your WhatsApp number
             window.open(whatsappUrl, "_blank");
 
-            if (result.success) {
-                alert("Pre-order submitted successfully!");
-                window.location.reload(); // Refresh the page to update availability
-            } else {
-                alert("Failed to submit pre-order. Please try again.");
-            }
+            alert("Pre-order submitted successfully!");
+            window.location.reload(); // Refresh the page to update availability
         }
     </script>
 </body>
