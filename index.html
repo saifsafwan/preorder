@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-Order Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .animate-bounce-custom {
+            animation: bounce 1s infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-6">
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Pre-Order Form</h1>
+
+    <!-- Availability Card -->
+    <div class="max-w-lg mx-auto bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow flex items-center" onclick="toggleForm()">
+        <!-- Image -->
+        <img src="https://via.placeholder.com/150" alt="Pulut Kuning + Rendang Daging" class="w-32 h-32 object-cover rounded-md mr-6">
+        <!-- Text -->
+        <div class="flex-1">
+            <h2 class="text-xl font-semibold text-gray-700 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Pulut Kuning + Rendang Daging
+            </h2>
+            <!-- Combined Available and Ordered Pax -->
+            <p class="text-gray-600 mt-2">
+                <span id="ordered-pax" class="font-bold">0</span>/<span id="available-pax" class="font-bold">0</span>
+            </p>
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                <div id="progress-bar" class="bg-green-500 h-2 rounded-full" style="width: 0%;"></div>
+            </div>
+            <!-- Remaining Pax -->
+            <p id="remaining-pax" class="text-sm text-gray-600 mt-2 hidden"></p>
+            <!-- Status -->
+            <p id="status" class="mt-3">
+                <span id="fire-icon" class="text-red-500 text-xl hidden">🔥</span>
+                <span id="new-label" class="text-green-500 font-bold animate-bounce-custom">NEW</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Pre-order Form -->
+    <div id="form-container" class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6 mt-8 hidden">
+        <form onsubmit="submitForm(event)">
+            <!-- Name -->
+            <label for="name" class="block text-sm font-medium text-gray-700 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                </svg>
+                Name:
+            </label>
+            <input type="text" id="name" placeholder="Enter your name" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+
+            <!-- Phone Number -->
+            <label for="phone" class="block text-sm font-medium text-gray-700 mt-4 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                </svg>
+                Phone Number:
+            </label>
+            <input type="tel" id="phone" placeholder="Enter your phone number" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+
+            <!-- Pax Amount -->
+            <label for="pax" class="block text-sm font-medium text-gray-700 mt-4 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                </svg>
+                Pax Amount:
+            </label>
+            <input type="number" id="pax" min="1" max="50" placeholder="Enter number of pax" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+            <p class="text-gray-700 mt-2 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-.464 5.535a1 1 0 10-1.415-1.414 3 3 0 01-4.242 0 1 1 0 00-1.415 1.414 5 5 0 007.072 0z" clip-rule="evenodd" />
+                </svg>
+                Total Price: RM<span id="total-price" class="font-bold">0.00</span>
+            </p>
+
+            <!-- Delivery Places -->
+            <div id="delivery-places" class="mt-4">
+                <h3 class="text-sm font-medium text-gray-700 mb-2">Available Delivery Places:</h3>
+                <div class="space-y-2">
+                    <!-- Nexus Blok A -->
+                    <div class="flex items-center bg-gray-100 p-3 rounded-md cursor-pointer hover:bg-opacity-50 transition-opacity" onclick="selectDeliveryPlace(this)">
+                        <div class="w-10 h-10 rounded-full bg-teal-400 flex items-center justify-center text-white font-bold text-lg mr-3">A</div>
+                        <span>Nexus Blok A</span>
+                    </div>
+                    <!-- Nexus Blok B -->
+                    <div class="flex items-center bg-gray-100 p-3 rounded-md cursor-pointer hover:bg-opacity-50 transition-opacity" onclick="selectDeliveryPlace(this)">
+                        <div class="w-10 h-10 rounded-full bg-green-400 flex items-center justify-center text-white font-bold text-lg mr-3">B</div>
+                        <span>Nexus Blok B</span>
+                    </div>
+                    <!-- Nexus Blok C -->
+                    <div class="flex items-center bg-gray-100 p-3 rounded-md cursor-pointer hover:bg-opacity-50 transition-opacity" onclick="selectDeliveryPlace(this)">
+                        <div class="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center text-white font-bold text-lg mr-3">C</div>
+                        <span>Nexus Blok C</span>
+                    </div>
+                    <!-- Bandar Teknologi Kajang -->
+                    <div class="flex items-center bg-gray-100 p-3 rounded-md cursor-pointer hover:bg-opacity-50 transition-opacity" onclick="selectDeliveryPlace(this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 rounded-full bg-purple-400 p-2 text-white mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                        </svg>
+                        <span>Bandar Teknologi Kajang</span>
+                    </div>
+                    <!-- Taman Desa Mewah -->
+                    <div class="flex items-center bg-gray-100 p-3 rounded-md cursor-pointer hover:bg-opacity-50 transition-opacity" onclick="selectDeliveryPlace(this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 rounded-full bg-pink-400 p-2 text-white mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                        <span>Taman Desa Mewah</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full mt-6 bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                </svg>
+                Submit Pre-order
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+        const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzqtAUA4gOXAWR6SezN2IrVPMj9X3-oM2Hqa65KIm70Ivy7WOR-xSifza6Votb1tDS3/exec"; // Replace with your Google Script URL
+        const fullUrl = proxyUrl + googleScriptUrl;
+        const pricePerPax = 10; // Price per pax in RM
+
+        // Fetch data from Google Sheets
+        async function fetchData() {
+            const response = await fetch(fullUrl);
+            const data = await response.json();
+
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            const availablePax = data.availablePax;
+            const orderedPax = data.orderedPax;
+
+            // Update availability card
+            const availablePaxElement = document.getElementById("available-pax");
+            const orderedPaxElement = document.getElementById("ordered-pax");
+            const progressBarElement = document.getElementById("progress-bar");
+            const remainingPaxElement = document.getElementById("remaining-pax");
+            const fireIconElement = document.getElementById("fire-icon");
+            const newLabelElement = document.getElementById("new-label");
+
+            // Calculate percentage ordered
+            const percentageOrdered = (orderedPax / availablePax) * 100;
+            progressBarElement.style.width = `${percentageOrdered}%`;
+
+            // Update text and remaining pax
+            availablePaxElement.textContent = availablePax;
+            orderedPaxElement.textContent = orderedPax;
+
+            if (percentageOrdered >= 75) {
+                const remainingPax = availablePax - orderedPax;
+                remainingPaxElement.textContent = `${remainingPax} left`;
+                remainingPaxElement.classList.remove("hidden");
+            } else {
+                remainingPaxElement.classList.add("hidden");
+            }
+
+            if (orderedPax > availablePax / 2) {
+                fireIconElement.classList.remove("hidden");
+                newLabelElement.classList.add("hidden");
+            } else {
+                fireIconElement.classList.add("hidden");
+                newLabelElement.classList.remove("hidden");
+            }
+        }
+
+        // Fetch data on page load
+        fetchData();
+
+        // Toggle form visibility
+        function toggleForm() {
+            const formContainer = document.getElementById("form-container");
+            formContainer.classList.toggle("hidden");
+        }
+
+        // Select delivery place
+        function selectDeliveryPlace(element) {
+            const deliveryCards = document.querySelectorAll("#delivery-places > div > div");
+            deliveryCards.forEach(card => {
+                card.classList.remove("bg-blue-500", "text-white");
+                card.classList.add("bg-gray-100", "hover:bg-opacity-50");
+            });
+            element.classList.remove("bg-gray-100", "hover:bg-opacity-50");
+            element.classList.add("bg-blue-500", "text-white");
+        }
+
+        // Calculate total price
+        const paxInput = document.getElementById("pax");
+        const totalPriceElement = document.getElementById("total-price");
+
+        paxInput.addEventListener("input", () => {
+            const pax = parseInt(paxInput.value) || 0;
+            totalPriceElement.textContent = (pax * pricePerPax).toFixed(2);
+        });
+
+        // Submit form
+        async function submitForm(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const phone = document.getElementById("phone").value;
+            const pax = document.getElementById("pax").value;
+            const selectedDeliveryPlace = document.querySelector("#delivery-places .bg-blue-500");
+
+            if (!name || !phone || !pax) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            if (!selectedDeliveryPlace) {
+                alert("Please select a delivery place.");
+                return;
+            }
+
+            const orderDetails = {
+                name,
+                phone,
+                pax,
+                delivery: selectedDeliveryPlace.textContent,
+                totalPrice: (pax * pricePerPax).toFixed(2),
+            };
+
+            // Send data to Google Sheets
+            const response = await fetch(fullUrl, {
+                method: "POST",
+                body: JSON.stringify(orderDetails),
+                headers: { "Content-Type": "application/json" }
+            });
+
+            const result = await response.json();
+
+            // Send data to WhatsApp
+            const whatsappMessage = `New Pre-order!\n\nName: ${orderDetails.name}\nPhone: ${orderDetails.phone}\nPax: ${orderDetails.pax}\nTotal Price: RM${orderDetails.totalPrice}\nDelivery: ${orderDetails.delivery}`;
+            const whatsappUrl = `https://wa.me/60189744569?text=${encodeURIComponent(whatsappMessage)}`; // Replace with your WhatsApp number
+            window.open(whatsappUrl, "_blank");
+
+            if (result.success) {
+                alert("Pre-order submitted successfully!");
+                window.location.reload(); // Refresh the page to update availability
+            } else {
+                alert("Failed to submit pre-order. Please try again.");
+            }
+        }
+    </script>
+</body>
+</html>
