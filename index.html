@@ -17,7 +17,12 @@
 </head>
 <body class="bg-gray-100 p-6">
     <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Pre-Order Form</h1>
-
+    <div id="loading-screen" class="fixed inset-0 w-full h-full bg-white bg-opacity-90 flex justify-center items-center z-50">
+        <div class="text-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+            <p class="text-gray-700">Loading data...</p>
+        </div>
+    </div>
     <!-- Availability Card -->
     <div class="max-w-lg mx-auto bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow flex items-center" onclick="toggleForm()">
         <!-- Image -->
@@ -135,49 +140,58 @@
         const fullUrl = googleScriptUrl;
         const pricePerPax = 10; // Price per pax in RM
 
+        document.getElementById("loading-screen").classList.remove("hidden");
+
         // Fetch data from Google Sheets
         async function fetchData() {
-            const response = await fetch(fullUrl);
-            const data = await response.json();
+            try {
+                const response = await fetch(fullUrl);
+                const data = await response.json();
 
-            if (data.error) {
-                alert(data.error);
-                return;
-            }
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
 
-            const availablePax = data.availablePax;
-            const orderedPax = data.orderedPax;
+                const availablePax = data.availablePax;
+                const orderedPax = data.orderedPax;
 
-            // Update availability card
-            const availablePaxElement = document.getElementById("available-pax");
-            const orderedPaxElement = document.getElementById("ordered-pax");
-            const progressBarElement = document.getElementById("progress-bar");
-            const remainingPaxElement = document.getElementById("remaining-pax");
-            const fireIconElement = document.getElementById("fire-icon");
-            const newLabelElement = document.getElementById("new-label");
+                // Update availability card
+                const availablePaxElement = document.getElementById("available-pax");
+                const orderedPaxElement = document.getElementById("ordered-pax");
+                const progressBarElement = document.getElementById("progress-bar");
+                const remainingPaxElement = document.getElementById("remaining-pax");
+                const fireIconElement = document.getElementById("fire-icon");
+                const newLabelElement = document.getElementById("new-label");
 
-            // Calculate percentage ordered
-            const percentageOrdered = (orderedPax / availablePax) * 100;
-            progressBarElement.style.width = `${percentageOrdered}%`;
+                // Calculate percentage ordered
+                const percentageOrdered = (orderedPax / availablePax) * 100;
+                progressBarElement.style.width = `${percentageOrdered}%`;
 
-            // Update text and remaining pax
-            availablePaxElement.textContent = availablePax;
-            orderedPaxElement.textContent = orderedPax;
+                // Update text and remaining pax
+                availablePaxElement.textContent = availablePax;
+                orderedPaxElement.textContent = orderedPax;
 
-            if (percentageOrdered >= 75) {
-                const remainingPax = availablePax - orderedPax;
-                remainingPaxElement.textContent = `${remainingPax} left`;
-                remainingPaxElement.classList.remove("hidden");
-            } else {
-                remainingPaxElement.classList.add("hidden");
-            }
+                if (percentageOrdered >= 75) {
+                    const remainingPax = availablePax - orderedPax;
+                    remainingPaxElement.textContent = `${remainingPax} left`;
+                    remainingPaxElement.classList.remove("hidden");
+                } else {
+                    remainingPaxElement.classList.add("hidden");
+                }
 
-            if (orderedPax > availablePax / 2) {
-                fireIconElement.classList.remove("hidden");
-                newLabelElement.classList.add("hidden");
-            } else {
-                fireIconElement.classList.add("hidden");
-                newLabelElement.classList.remove("hidden");
+                if (orderedPax > availablePax / 2) {
+                    fireIconElement.classList.remove("hidden");
+                    newLabelElement.classList.add("hidden");
+                } else {
+                    fireIconElement.classList.add("hidden");
+                    newLabelElement.classList.remove("hidden");
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                // Hide loading screen
+                document.getElementById("loading-screen").classList.add("hidden");
             }
         }
 
