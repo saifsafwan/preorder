@@ -29,6 +29,9 @@
         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgiZZufK-81T_1u7DkwKQFoSjO1Fy41_jQpIdQpPvh-O0OVtnmW5gqyTmmXK7XoNwvhyd-ElPM0fqKlVk7SjC-h4VpPB8hv9qAZHRShmOxwoaWKbdbxkTuvggE9AjhicDbic8Eop3IbjSfwwwcNnGxPmvI4g6mo7WcyBc1CUQ8v3Adb2UtiOIlD93wygPw/s320/IMG-20250112-WA0004.jpg" alt="Pulut Kuning + Rendang Daging" class="w-32 h-32 object-cover rounded-md mr-6">
         <!-- Text -->
         <div class="flex-1">
+            <div class="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full inline-block mb-2">
+                Delivery On: <span id="delivery-date">2024-01-20</span>
+            </div>
             <h2 class="text-xl font-semibold text-gray-700 flex items-center">
                 Pulut Kuning + Rendang Daging
             </h2>
@@ -164,6 +167,7 @@
 
                 const availablePax = data.availablePax;
                 const orderedPax = data.orderedPax;
+                const deliveryOn = formatDate(data.date);
 
                 // Update availability card
                 const availablePaxElement = document.getElementById("available-pax");
@@ -172,6 +176,7 @@
                 const remainingPaxElement = document.getElementById("remaining-pax");
                 const fireIconElement = document.getElementById("fire-icon");
                 const newLabelElement = document.getElementById("new-label");
+                const deliveryOnElement = document.getElementById('delivery-date');
 
                 // Calculate percentage ordered
                 const percentageOrdered = (orderedPax / availablePax) * 100;
@@ -180,6 +185,7 @@
                 // Update text and remaining pax
                 availablePaxElement.textContent = availablePax;
                 orderedPaxElement.textContent = orderedPax;
+                deliveryOnElement.textContent = deliveryOn;
 
                 if (percentageOrdered >= 75) {
                     const remainingPax = availablePax - orderedPax;
@@ -277,6 +283,30 @@
 
             alert("Pre-order submitted successfully!");
             window.location.reload(); // Refresh the page to update availability
+        }
+
+        function formatDate(dateString) {
+            // Split the input string into day, month, and year
+            const [day, month, year] = dateString.split('/');
+
+            // Create a Date object
+            const date = new Date(`${year}-${month}-${day}`);
+
+            // Define an array of day names
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+            // Get the day name
+            const dayName = days[date.getDay()];
+
+            // Format the date as "dd MMMM yyyy"
+            const formattedDate = date.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            // Return the formatted string
+            return `${dayName}, ${formattedDate}`;
         }
     </script>
 </body>
