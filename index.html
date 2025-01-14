@@ -247,7 +247,7 @@
                 name,
                 phone,
                 pax,
-                delivery: selectedDeliveryPlace.textContent,
+                delivery: selectedDeliveryPlace.textContent.replace(/[\r\n\t]+/g, '').trim(),
                 totalPrice: (pax * pricePerPax).toFixed(2),
             };
 
@@ -262,7 +262,7 @@
             //const result = await response.json();
 
             // Send data to WhatsApp
-            const whatsappMessage = `New Pre-order!\n\nName: ${orderDetails.name}\nPhone: ${orderDetails.phone}\nPax: ${orderDetails.pax}\nTotal Price: RM${orderDetails.totalPrice}\nDelivery: ${orderDetails.delivery}`;
+            const whatsappMessage = `*Saya Nak Pre-order Pulut Kuning + Rendang Daging!*\n\nName: *${orderDetails.name}*\nPhone: *${orderDetails.phone}*\nPax: *${orderDetails.pax}*\nTotal Price: *RM${orderDetails.totalPrice}*\nDelivery: *${orderDetails.delivery}*`;
             const whatsappUrl = `https://wa.me/60189744569?text=${encodeURIComponent(whatsappMessage)}`; // Replace with your WhatsApp number
             window.open(whatsappUrl, "_blank");
 
